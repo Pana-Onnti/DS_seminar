@@ -23,13 +23,11 @@ class DescargarDataYahoo:
         data.columns = self.assets
         return data
     
-   
     def calcular_retornos(self, precios):
         # Calcular retornos
         retornos = precios[self.assets].pct_change().dropna()
         return retornos
 
 
-datos = DescargarDataYahoo(assets=["AAPL", "MSFT"], start="2023-01-01", end="2023-06-01")
-data = datos.descargar_precios_yahoo()
-print(data)
+#datos = DescargarDataYahoo(assets=assets, start="2023-01-01", end="2023-06-01")
+#print(datos.data)
