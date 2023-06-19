@@ -6,29 +6,30 @@ warnings.filterwarnings("ignore")
 # Date range
 
 from variables import end,assets,start
+import yfinance as yf
+import pandas as pd
 
-
-# Downloading data
-data = yf.download(assets, start = start, end = end)
-data = data.loc[:,('Adj Close', slice(None))]
-data.columns = assets
-# Calculating returns
-Y = data[assets].pct_change().dropna()
-Y.head()
-
-def descargar_precios_yahoo (activos:list,start,end):
-    precios_activos = yf.download(activos,start = start, end = end)
-    precios_activos = precios_activos.loc[:,('Adj Close', slice(None))]
-    precios_activos.columns = assets
-    return precios_activos
-
-def calcular_retornos (precios):
-    retornos = precios[assets].pct_change().dropna()
-    return retornos
+class DescargarDataYahoo:
+    def __init__(self, assets, start, end):
+        self.assets = assets
+        self.start = start
+        self.end = end
+        self.data = self.descargar_data()
+    
+    def descargar_data(self):
+        # Descargar datos
+        data = yf.download(self.assets, start=self.start, end=self.end)
+        data = data.loc[:, ('Adj Close', slice(None))]
+        data.columns = self.assets
+        return data
+    
    
+    def calcular_retornos(self, precios):
+        # Calcular retornos
+        retornos = precios[self.assets].pct_change().dropna()
+        return retornos
 
-precios = descargar_precios_yahoo(assets, start = start, end = end)
 
-retornos = calcular_retornos(precios)
-
-retornos.head()
+datos = DescargarDataYahoo(assets=["AAPL", "MSFT"], start="2023-01-01", end="2023-06-01")
+data = datos.descargar_precios_yahoo()
+print(data)
